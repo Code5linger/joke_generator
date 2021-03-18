@@ -1,23 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {useState, useEffect} from 'react';
+
+const API_URL = `http://api.icndb.com/jokes/random`;
 
 function App() {
+  const [quote, setQuote] = useState('');
+
+  const generateQuote = () => {
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => setQuote(data.value.joke));
+  }
+
+  useEffect(() =>{
+    generateQuote();
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="box">
+      <h3>Quote</h3>
+      <p dangerouslySetInnerHTML={{__html: quote}} />
+      <button onClick={generateQuote}>Get New Quote 💭</button>
     </div>
   );
 }
